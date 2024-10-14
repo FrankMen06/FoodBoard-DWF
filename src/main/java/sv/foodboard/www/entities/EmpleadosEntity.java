@@ -1,68 +1,49 @@
 package sv.foodboard.www.entities;
 
 import jakarta.persistence.*;
-
 import java.sql.Date;
-import java.util.Collection;
-import java.util.Objects;
 
 @Entity
-@Table(name = "empleados", schema = "foodboard", catalog = "")
 public class EmpleadosEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "codigo", nullable = false, length = 8)
     private String codigo;
-    @Basic
-    @Column(name = "contraseña", nullable = false, length = 200)
+
     private String contraseña;
-    @Basic
-    @Column(name = "nombre1", nullable = false, length = 100)
+
     private String nombre1;
-    @Basic
-    @Column(name = "nombre2", nullable = false, length = 100)
+
     private String nombre2;
-    @Basic
-    @Column(name = "apellido1", nullable = false, length = 100)
+
     private String apellido1;
-    @Basic
-    @Column(name = "apellido2", nullable = false, length = 100)
+
     private String apellido2;
-    @Basic
-    @Column(name = "correo", nullable = false, length = 200)
+
     private String correo;
-    @Basic
-    @Column(name = "telefono", nullable = false, length = 10)
+
     private String telefono;
-    @Basic
-    @Column(name = "dui", nullable = false, length = 10)
+
     private String dui;
-    @Basic
-    @Column(name = "fechaNac", nullable = false)
+
     private Date fechaNac;
-    @Basic
-    @Column(name = "direccion", nullable = false, length = 200)
+
     private String direccion;
-    @Basic
-    @Column(name = "municipio", nullable = false, length = 200)
+
     private String municipio;
-    @Basic
-    @Column(name = "departamento", nullable = false, length = 200)
+
     private String departamento;
-    @Basic
-    @Column(name = "sexo", nullable = false, length = 20)
+
     private String sexo;
-    @Basic
-    @Column(name = "estadoCivil", nullable = false, length = 50)
+
     private String estadoCivil;
-    @Basic
-    @Column(name = "rol", nullable = false, length = 25)
+
     private String rol;
-    @Basic
-    @Column(name = "estado", nullable = false, length = 25)
+
     private String estado;
-    @OneToMany(mappedBy = "empleadosByCodigo")
-    private Collection<ClientesEntity> clientesByCodigo;
+
+    public EmpleadosEntity() {}
+
+    // Getters y Setters
 
     public String getCodigo() {
         return codigo;
@@ -198,26 +179,5 @@ public class EmpleadosEntity {
 
     public void setEstado(String estado) {
         this.estado = estado;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        EmpleadosEntity that = (EmpleadosEntity) o;
-        return Objects.equals(codigo, that.codigo) && Objects.equals(contraseña, that.contraseña) && Objects.equals(nombre1, that.nombre1) && Objects.equals(nombre2, that.nombre2) && Objects.equals(apellido1, that.apellido1) && Objects.equals(apellido2, that.apellido2) && Objects.equals(correo, that.correo) && Objects.equals(telefono, that.telefono) && Objects.equals(dui, that.dui) && Objects.equals(fechaNac, that.fechaNac) && Objects.equals(direccion, that.direccion) && Objects.equals(municipio, that.municipio) && Objects.equals(departamento, that.departamento) && Objects.equals(sexo, that.sexo) && Objects.equals(estadoCivil, that.estadoCivil) && Objects.equals(rol, that.rol) && Objects.equals(estado, that.estado);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(codigo, contraseña, nombre1, nombre2, apellido1, apellido2, correo, telefono, dui, fechaNac, direccion, municipio, departamento, sexo, estadoCivil, rol, estado);
-    }
-
-    public Collection<ClientesEntity> getClientesByCodigo() {
-        return clientesByCodigo;
-    }
-
-    public void setClientesByCodigo(Collection<ClientesEntity> clientesByCodigo) {
-        this.clientesByCodigo = clientesByCodigo;
     }
 }

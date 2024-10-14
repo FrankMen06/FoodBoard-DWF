@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-10-2024 a las 03:55:26
+-- Tiempo de generación: 14-10-2024 a las 03:57:32
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -45,7 +45,8 @@ CREATE TABLE `clientes` (
   `idMesa` int(11) NOT NULL,
   `codigo` varchar(8) NOT NULL,
   `tiempo` int(11) DEFAULT NULL,
-  `estado` varchar(25) NOT NULL
+  `estado` varchar(25) NOT NULL,
+  `id_mesa` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -57,7 +58,8 @@ CREATE TABLE `clientes` (
 CREATE TABLE `comentario` (
   `idComentario` int(11) NOT NULL,
   `comentario` varchar(500) NOT NULL,
-  `idProducto` int(11) NOT NULL
+  `idProducto` int(11) NOT NULL,
+  `id_producto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -76,7 +78,7 @@ CREATE TABLE `empleados` (
   `correo` varchar(200) NOT NULL,
   `telefono` varchar(10) NOT NULL,
   `dui` varchar(10) NOT NULL,
-  `fechaNac` date NOT NULL,
+  `fechaNac` varchar(12) NOT NULL,
   `direccion` varchar(200) NOT NULL,
   `municipio` varchar(200) NOT NULL,
   `departamento` varchar(200) NOT NULL,
@@ -85,6 +87,19 @@ CREATE TABLE `empleados` (
   `rol` varchar(25) NOT NULL,
   `estado` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `empleados`
+--
+
+INSERT INTO `empleados` (`codigo`, `contraseña`, `nombre1`, `nombre2`, `apellido1`, `apellido2`, `correo`, `telefono`, `dui`, `fechaNac`, `direccion`, `municipio`, `departamento`, `sexo`, `estadoCivil`, `rol`, `estado`) VALUES
+('1234', '1234', 'Oscar', 'José', 'Gallegos', 'Hernández', 'xd@gmail.com', '7635-8954', '12345678-6', '2003-06-29', 'Calle a tonacatepeque', 'San Salvador Este', 'San Salvador', 'Masculino', 'Soltera/o', 'Mesero', 'si'),
+('maca123', '$2a$10$CwTycUXWue0Thq9StjUM0uJ8TBgUx7HkXbzpvM8yX7UPX6BfKLS9m', 'maria', 'Josefa', 'Vásquez', 'castillo', 'maria@gmail.com', '7346-1937', '12345678-4', '2004-01-29', 'Soyapango', 'Cuscatlán Norte', 'San Salvador', 'Masculino', 'Soltera/o', 'Administrador', 'si'),
+('mo0111', '1234', 'Benito', 'Antonio', 'Martinez', 'Ocasio', 'xd2@gmail.com', '7389-1256', '12345678-2', '2004-11-01', 'Distrito de soyapango', 'Primero seleccione un departamento', 'San Salvador', 'Masculino', 'Soltera/o', 'Recepcionista', 'si'),
+('ms222712', '1234', 'José', 'Macario', 'Rojas', 'Arévalo', 'oficial.count@gmail.com', '7346-1947', '12345678-1', '2004-10-23', 'Soya', 'Primero seleccione un departamento', 'San Salvador', 'Masculino', 'Soltera/o', 'Mesero', 'si'),
+('Pedidos', '1234', 'Pedidos', 'Pedidos', 'Pedidos', 'Pedidos', 'Pedidos', 'Pedidos', 'Pedidos', '2004-11-01', 'Pedidos', 'Pedidos', 'Pedidos', 'Pedidos', 'Pedidos', 'Pedidos', 'si'),
+('wa91234', '1234', 'Roberto', 'Carlos', 'Ramirez', 'Ochoa', 'kjjkl.am29@gmail.com', '7695-8954', '12345678-5', '2004-01-29', 'Distrito de soyapango', 'Ahuachapán Norte', 'Ahuachapán', 'Masculino', 'Casada/o', 'Mesero', 'si'),
+('xd01', '1234', 'furcio', 'Godofredo', 'murcia', 'Hernández', 'furcio@gmail.com', '7822-1744', '12345678-3', '2004-12-25', 'Algo', 'San Salvador Este', 'San Salvador', 'Masculino', 'Viuda/o', 'Jefe de cocina', 'si');
 
 -- --------------------------------------------------------
 
@@ -115,7 +130,10 @@ CREATE TABLE `orden` (
   `tiempoEspera` time DEFAULT NULL,
   `total` double NOT NULL,
   `comentario` varchar(200) NOT NULL,
-  `estado` varchar(25) NOT NULL
+  `estado` varchar(25) NOT NULL,
+  `codigo_client` varchar(8) NOT NULL,
+  `id_producto` int(11) NOT NULL,
+  `tiempo_espera` time(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -132,7 +150,8 @@ CREATE TABLE `productos` (
   `precio` double NOT NULL,
   `imagen` varchar(100) NOT NULL,
   `tiempo` time NOT NULL,
-  `estado` varchar(25) NOT NULL
+  `estado` varchar(25) NOT NULL,
+  `id_categoria` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
