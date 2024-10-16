@@ -1,10 +1,13 @@
-package sv.foodboard.www.entities;
+package sv.foodboard.www.model;
 
 import jakarta.persistence.*;
+
 import java.sql.Date;
 
 @Entity
-public class EmpleadosEntity {
+@Table(name = "empleados")
+public class Empleados {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private String codigo;
@@ -25,6 +28,7 @@ public class EmpleadosEntity {
 
     private String dui;
 
+    @Temporal(TemporalType.DATE)
     private Date fechaNac;
 
     private String direccion;
@@ -41,7 +45,7 @@ public class EmpleadosEntity {
 
     private String estado;
 
-    public EmpleadosEntity() {}
+    public Empleados() {}
 
     // Getters y Setters
 
