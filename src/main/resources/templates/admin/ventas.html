@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe de Ventas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <form id="graficas" th:action="@{/grafica}" method="post">
+        <div th:each="m, loop : ${ordenManaged.informeMensual()}">
+            <div th:text="${grafica.lista(m[1], m[0])}"></div>
+        </div>
+        <a onclick="descargarMes('Gráfica_Mensual')" class="btn btn-primary float-right" href="#">Descargar Gráfica</a>
+        <br/>
+        <div id="mes">
+            <div class="container">
+                <div class="form-group narrow-div float-right" style="width: 25%;">
+                    <label class="lead font-weight-bold">Seleccionar año:</label>
+                    <select class="form-control float-right" id="ordenaar" th:field="${ordenManaged.anioo}"
+                            th:change="|this.form.submit()|">
+                        <option th:each="a : ${ordenManaged.modelo.años()}" th:value="${a}" th:text="${a}"></option>
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <h1 class="text-center display-4">Gráfica Mensual</h1>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel" id="graficaMensual">
+                        <p:donutChart th:model="${grafica.donutModel}" style="width: 100%; height: 200px;" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel" id="graficaMensualBarra">
+                        <p:barChart th:model="${grafica.mixedModel}" style="width: 100%; height: 200px;"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <br/>
+    <form id="anio" th:action="@{/grafica/anio}" method="post">
+        <div th:each="m, loop : ${ordenManaged.modelo.informeAnual()}">
+            <div th:text="${grafica.lista(m[1], m[0])}"></div>
+        </div>
+        <a onclick="descargarAnio('Gráfica_Año')" class="btn btn-primary float-right" href="#">Descargar Gráfica</a>
+        <br/>
+        <div id="anioo">
+            <h1 class="text-center display-4">Gráfica Anual</h1>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel" id="graficaAnual">
+                        <p:donutChart th:model="${grafica.donutModel}" style="width: 100%; height: 200px;" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel" id="graficaAnualBarra">
+                        <p:barChart th:model="${grafica.mixedModel}" style="width: 100%; height: 200px;"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="width: 200px;">
+                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Mensual</a>
+                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Anual</a>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                        <h1 class="text-center display-4">Informe de ventas Mensual</h1>
+                        <br/>
+                        <form th:action="@{/descargarInforme(mes=${ordenManaged.anioo})}" method="post">
+                            <button type="submit" class="btn btn-outline-success" th:disabled="${#lists.isEmpty(ordenManaged.modelo.años())}">Descargar Informe</button>
+                        </form>
+                        <br/>
+                        <div class="container">
+                            <div class="form-group narrow-div float-right" style="width: 25%;">
+                                <form>
+                                    <label class="lead font-weight-bold">Seleccionar año:</label>
+                                    <select class="form-control float-right" id="ordenar" th:field="${ordenManaged.anioo}"
+                                            th:change="|this.form.submit()|">
+                                        <option th:each="a : ${ordenManaged.modelo.años()}" th:value="${a}" th:text="${a}"></option>
+                                    </select>
+                                </form>
+                            </div>
+                        </div>
+                        <form id="mensual">
+                            <br/><br/>
+                            <div th:if="${ordenManaged.anioo == 0}">
+                                <p class="lead text-center"><b>Reporte mensual del año <span th:text="${ordenManaged.anioActual()}"></span></b></p>
+                            </div>
+                            <div th:if="${ordenManaged.anioo > 0}">
+                                <p class="lead text-center"><b>Reporte mensual del año <span th:text="${ordenManaged.anioo}"></span></b></p>
+                            </div>
+                            <br>
+                            <table class="table text-center">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Mes</th>
+                                    <th scope="col">Venta del mes</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <div th:text="${ordenManaged.reiniciarSuma()}"></div>
+                                <div th:text="${descargarReporte.limpiarLista2()}"></div>
+                                <th:block th:each="m, loop : ${ordenManaged.informeMensual()}">
+                                    <div th:text="${ordenManaged.sumar(m[1])}"></div>
+                                    <tr>
+                                        <td th:text="${m[0]}"></td>
+                                        <td th:text="${'$' + m[1]}"></td>
+                                    </tr>
+                                    <div th:text="${descargarReporte.listaMes(loop.index + 1, m[0], m[1])}"></div>
+                                </th:block>
+                                </tbody>
+                            </table>
+                            <br/>
+                            <div th:if="${ordenManaged.anioo == 0}">
+                                <p class="lead text-center"><b>Venta total del año <span th:text="${ordenManaged.anioActual()}"></span>: $<span th:text="${ordenManaged.totalCarrito}"></span></b></p>
+                            </div>
+                            <div th:if="${ordenManaged.anioo > 0}">
+                                <p class="lead text-center"><b>Venta total del año <span th:text="${ordenManaged.anioo}"></span>: $<span th:text="${ordenManaged.totalCarrito}"></span></b></p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="panel">
+                                        <p:donutChart th:model="${grafica.donutModel}" style="width: 100%; height: 200px;" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="panel">
+                                        <p:barChart th:model="${grafica.mixedModel}" style="width: 100%; height: 200px;"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function descargarMes(nombreGrafica) {
+        const element = document.getElementById("graficaMensual"); // Cambia esto según el ID de tu gráfica
+        html2canvas(element).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF();
+            pdf.addImage(imgData, 'PNG', 10, 10);
+            pdf.save(`${nombreGrafica}.pdf`);
+        });
+    }
+
+    function descargarAnio(nombreGrafica) {
+        const element = document.getElementById("graficaAnual"); // Cambia esto según el ID de tu gráfica
+        html2canvas(element).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF();
+            pdf.addImage(imgData, 'PNG', 10, 10);
+            pdf.save(`${nombreGrafica}.pdf`);
+        });
+    }
+</script>
+</body>
+</html>

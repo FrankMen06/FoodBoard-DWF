@@ -2,10 +2,114 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Panel Admin</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #FFFFFF; /* Fondo blanco */
+            color: #212121; /* Texto negro suave */
+        }
+        .card {
+            margin: 15px; /* Espacio entre tarjetas */
+            transition: transform 0.2s; /* Animación de movimiento */
+        }
+        .card:hover {
+            transform: scale(1.05); /* Aumentar tamaño al pasar el mouse */
+        }
+        .text-center {
+            cursor: pointer; /* Cambia el cursor para indicar que es clickable */
+        }
+        .icon-orange {
+            color: #FF7043; /* Color naranja cálido para los iconos */
+        }
+    </style>
 </head>
 <body>
-    <h1>Bienvenido Admin</h1>
-    <a th:href="@{/logout}">Cerrar sesión</a>
+<div class="container mt-5">
+    <h1>Bienvenido  <span th:text="${nombreAdmin}"></span></h1>
+    <a th:href="@{/logout}" class="btn btn-danger">Cerrar sesión</a>
+
+    <!-- Primera fila de tarjetas -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <br/>
+                <a th:href="@{/admin/gestionar_empleados}" class="text-center">
+                    <h1><i class="fas fa-user-friends fa-3x icon-orange"></i></h1>
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title lead text-center fade-text">GESTIONAR EMPLEADOS</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <br/>
+                <a th:href="@{/admin/mesas}" class="text-center">
+                    <h1><i class="fas fa-chair fa-3x icon-orange"></i></h1>
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title lead text-center fade-text">GESTIONAR MESAS</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <br/>
+                <a th:href="@{/admin/ventas}" class="text-center">
+                    <h1><i class="fas fa-chart-line fa-3x icon-orange"></i></h1>
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title lead text-center fade-text">GESTIONAR VENTAS</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Segunda fila de tarjetas -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <br/>
+                <a th:href="@{/admin/detalle}" class="text-center">
+                    <h1><i class="fas fa-info-circle fa-3x icon-orange"></i></h1>
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title lead text-center fade-text">GESTIONAR DETALLES</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <br/>
+                <a th:href="@{/admin/productos}" class="text-center">
+                    <h1><i class="fas fa-boxes fa-3x icon-orange"></i></h1>
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title lead text-center fade-text">GESTIONAR PRODUCTOS</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <br/>
+                <a th:href="@{/admin/sectores}" class="text-center">
+                    <h1><i class="fas fa-industry fa-3x icon-orange"></i></h1>
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title lead text-center fade-text">GESTIONAR SECTORES</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

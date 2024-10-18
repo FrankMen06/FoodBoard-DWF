@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestionar Sectores del Restaurante</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="bg-gray-100 text-black">
+
+<div class="container mt-5">
+    <h1 class="text-center display-4">Gestionar Sectores del Restaurante</h1>
+    <p class="lead">En este apartado usted podrá crear, actualizar o eliminar los sectores del restaurante y asignarle la capacidad máxima de mesas. En la parte inferior usted puede visualizar a los sectores que se encuentran registrados.</p>
+
+    <div th:if="${#lists.isEmpty(sectorManaged.listSector())}">
+        <div class="alert alert-info bg-gray-200 text-black" role="alert">No hay sectores registrados.</div>
+    </div>
+
+    <div th:if="${!#lists.isEmpty(sectorManaged.listSector())}">
+        <p class="alert alert-primary" th:each="msg : ${#fields.getMessages()}" th:text="${msg}"></p>
+    </div>
+
+    <hr class="my-4"/>
+
+    <form th:action="@{${sectorManaged.guardarSector()}}" method="post" th:object="${sectorManaged.sector}">
+        <input type="hidden" th:field="*{idSector}"/>
+        <input type="hidden" th:field="*{estado}"/>
+
+        <div class="form-group">
+            <label for="nombre" class="lead">Nombre: </label>
+            <input type="text" id="nombre" class="form-control" th:field="*{nombre}" required/>
+        </div>
+
+        <div class="form-group">
+            <label for="mesa" class="lead">Capacidad máxima de mesas: </label>
+            <input type="number" id="mesa" class="form-control" th:field="*{capacidad}" min="1" required/>
+            <small class="form-text text-muted">La capacidad mínima debe ser de 1.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="descripcion" class="lead">Descripción: </label>
+            <input type="text" id="descripcion" class="form-control" th:field="*{descripcion}" required/>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-outline-success mr-2" th:if="${sectorManaged.sector.idSector == 0}">Ingresar Sector</button>
+            <button type="submit" class="btn btn-outline-success mr-2" th:if="${sectorManaged.sector.idSector > 0}" th:action="@{${sectorManaged.modificarSector()}}">Modificar Sector</button>
+            <button type="button" class="btn btn-outline-danger" th:if="${sectorManaged.sector.idSector > 0}" th:onclick="'return confirm(\'¿Estás seguro de cancelar?\')'" th:action="@{${sectorManaged.cancelar()}}">Cancelar</button>
+        </div>
+    </form>
+
+    <br/><br/>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="thead-dark text-center">
+            <tr>
+                <th scope="col">Id Sector</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Capacidad</th>
+                <th scope="col">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sec : ${sectorManaged.listSector()}" class="text-center">
+                <td th:text="${sec.idSector}"></td>
+                <td th:text="${sec.nombre}"></td>
+                <td th:text="${sec.descripcion}"></td>
+                <td th:text="${sec.capacidad}"></td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <form th:action="@{${sectorManaged.data(sec)}}" method="post" class="mr-2">
+                            <button type="submit" class="btn btn-outline-primary">Modificar</button>
+                        </form>
+                        <form th:action="@{${sectorManaged.eliminarSector(sec)}}" method="post" onsubmit="return confirm('¿Quieres eliminar este sector?')">
+                            <button type="submit" class="btn btn-outline-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

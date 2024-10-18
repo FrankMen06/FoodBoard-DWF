@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aceptar o Rechazar Productos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="fragments/menuAdmin :: menu"></div>
+<div class="container">
+    <h1 class="text-center display-4">Aceptar o Rechazar Productos</h1>
+    <p class="lead">En este apartado usted podrá aceptar o rechazar lo productos que se mostrarán en el menú, también tiene la opción de ajustar el precio del platillo.</p>
+    <div th:if="${messages}" class="alert alert-warning" role="alert">
+        <p th:text="${messages}"></p>
+    </div>
+    <hr class="my-4"/>
+
+    <div class="form-group narrow-div float-right" style="width: 25%;">
+        <form th:action="@{/}" method="post">
+            <label class="lead font-weight-bold">Mostrar productos:</label>
+            <select class="form-control float-right" id="ordenar" th:field="${productoManaged.opcion}" th:onchange="this.form.submit()">
+                <option value="Pendiente">Pendientes</option>
+                <option value="Aceptado">Aprobados</option>
+                <option value="Rechazado">Rechazados</option>
+                <option value="Quitar">Retirados</option>
+                <option value="Eli">Solicitudes de eliminación</option>
+            </select>
+        </form>
+    </div>
+
+    <h2>Productos</h2>
+    <div class="row" th:each="produ : ${productoManaged.listProductos()}">
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <img th:src="@{http://localhost/FoodFlow_img/{produ.imagen}}" class="card-img-top" width="286px" height="214px" alt="Imagen del producto"/>
+                <div class="card-body">
+                    <div th:if="${produ.estado == 'Pendiente'}">
+                            <span th:if="${#lists.size(productoManaged.modelo.listarComentarios(produ.idProducto)) > 0}">
+                                <a href="#" data-toggle="modal" th:attr="data-target='#exampleModal' + ${produ.idProducto}">
+                                    <h5 class="card-title lead font-weight-bold">
+                                        <span class="text-primary" th:text="${produ.nombre}"></span>
+                                        <span class="badge badge-warning" th:text="${produ.estado}"></span>
+                                    </h5>
+                                </a>
+                            </span>
+                        <span th:if="${#lists.size(productoManaged.modelo.listarComentarios(produ.idProducto)) == 0}">
+                                <h5 class="card-title lead font-weight-bold">
+                                    <span th:text="${produ.nombre}"></span>
+                                    <span class="badge badge-warning" th:text="${produ.estado}"></span>
+                                </h5>
+                            </span>
+                    </div>
+
+                    <div th:if="${produ.estado == 'Rechazado'}">
+                            <span th:if="${#lists.size(productoManaged.modelo.listarComentarios(produ.idProducto)) > 0}">
+                                <a href="#" data-toggle="modal" th:attr="data-target='#exampleModal' + ${produ.idProducto}">
+                                    <h5 class="card-title lead font-weight-bold">
+                                        <span class="text-primary" th:text="${produ.nombre}"></span>
+                                        <span class="badge badge-danger" th:text="${produ.estado}"></span>
+                                    </h5>
+                                </a>
+                            </span>
+                        <span th:if="${#lists.size(productoManaged.modelo.listarComentarios(produ.idProducto)) == 0}">
+                                <h5 class="card-title lead font-weight-bold">
+                                    <span th:text="${produ.nombre}"></span>
+                                    <span class="badge badge-danger" th:text="${produ.estado}"></span>
+                                </h5>
+                            </span>
+                    </div>
+
+                    <div th:if="${produ.estado == 'Aceptado'}">
+                            <span th:if="${#lists.size(productoManaged.modelo.listarComentarios(produ.idProducto)) > 0}">
+                                <a href="#" data-toggle="modal" th:attr="data-target='#exampleModal' + ${produ.idProducto}">
+                                    <h5 class="card-title lead font-weight-bold">
+                                        <span class="text-primary" th:text="${produ.nombre}"></span>
+                                        <span class="badge badge-success" th:text="${produ.estado}"></span>
+                                    </h5>
+                                </a>
+                            </span>
+                        <span th:if="${#lists.size(productoManaged.modelo.listarComentarios(produ.idProducto)) == 0}">
+                                <h5 class="card-title lead font-weight-bold">
+                                    <span th:text="${produ.nombre}"></span>
+                                    <span class="badge badge-success" th:text="${produ.estado}"></span>
+                                </h5>
+                            </span>
+                    </div>
+
+                    <div th:if="${produ.estado == 'Quitar'}">
+                            <span th:if="${#lists.size(productoManaged.modelo.listarComentarios(produ.idProducto)) > 0}">
+                                <a href="#" data-toggle="modal" th:attr="data-target='#exampleModal' + ${produ.idProducto}">
+                                    <h5 class="card-title lead font-weight-bold">
+                                        <span class="text-primary" th:text="${produ.nombre}"></span>
+                                        <span class="badge badge-primary">Retirado</span>
+                                    </h5>
+                                </a>
+                            </span>
+                        <span th:if="${#lists.size(productoManaged.modelo.listarComentarios(produ.idProducto)) == 0}">
+                                <h5 class="card-title lead font-weight-bold">
+                                    <span th:text="${produ.nombre}"></span>
+                                    <span class="badge badge-primary">Retirado</span>
+                                </h5>
+                            </span>
+                    </div>
+
+                    <div th:if="${produ.estado == 'Eli'}">
+                            <span th:if="${#lists.size(productoManaged.modelo.listarComentarios(produ.idProducto)) > 0}">
+                                <a href="#" data-toggle="modal" th:attr="data-target='#exampleModal' + ${produ.idProducto}">
+                                    <h5 class="card-title lead font-weight-bold">
+                                        <span class="text-primary" th:text="${produ.nombre}"></span>
+                                        <span class="badge badge-secondary">Anulado</span>
+                                    </h5>
+                                </a>
+                            </span>
+                        <span th:if="${#lists.size(productoManaged.modelo.listarComentarios(produ.idProducto)) == 0}">
+                                <h5 class="card-title lead font-weight-bold">
+                                    <span th:text="${produ.nombre}"></span>
+                                    <span class="badge badge-secondary">Anulado</span>
+                                </h5>
+                            </span>
+                    </div>
+
+                    <p class="card-text" th:text="${produ.descripcion}"></p>
+                    <p class="card-text"><b>Categoria:</b> <span th:text="${produ.categoriasByIdCategoria.nombre}"></span></p>
+                    <p class="card-text"><b>Precio:</b> $<span th:text="${produ.precio}"></span></p>
+                    <label th:if="${produ.estado == 'Pendiente' or produ.estado == 'Aceptado' or produ.estado == 'Quitar'}" class="lead">Precio del producto: </label>
+                    <br/>
+                    <input type="number" th:if="${produ.estado == 'Pendiente' or produ.estado == 'Aceptado' or produ.estado == 'Quitar'}" th:field="${productoManaged.producto.precio}" min="0" step="0.1" class="form-control" />
+
+                    <div class="card-body">
+                        <center>
+                            <div th:if="${produ.estado == 'Pendiente'}">
+                                <div class="form-group row">
+                                    <button class="btn btn-primary" th:onclick="'return confirm(\'¿Está seguro de aceptar este producto?\')'" th:action="@{${productoManaged.aceptarProducto(produ, produ.categoriasByIdCategoria.idCategoria)}}">Aceptar</button>
+                                    <a class="btn btn-danger" data-toggle="collapse" th:attr="href='#collapseExample' + ${produ.idProducto}" role="button" aria-expanded="false" aria-controls="collapseExample">Rechazar</a>
+                                </div>
+                            </div>
+                            <div th:if="${produ.estado == 'Aceptado' or produ.estado == 'Quitar'}">
+                                <div class="form-group row">
+                                    <button class="btn btn-primary" th:onclick="'return confirm(\'¿Está seguro de modificar este producto?\')'" th:action="@{${productoManaged.aceptarProducto(produ, produ.categoriasByIdCategoria.idCategoria)}}">Modificar</button>
+                                    <button class="btn btn-danger" th:action="@{${productoManaged.updateEstado(produ, produ.categoriasByIdCategoria.idCategoria, 'Quitar')}}"
+                                            th:onclick="'return confirm(\'Este producto ya no será visible para los clientes\')'">Retirar</button>
+                                    <button class="btn btn-danger" th:action="@{${productoManaged.updateEstado(produ, produ.categoriasByIdCategoria.idCategoria, 'Eli')}}"
+                                            th:onclick="'return confirm(\'Este producto ha sido eliminado del sistema\')'">Eliminar</button>
+                                </div>
+                            </div>
+                            <div th:if="${produ.estado == 'Rechazado'}">
+                                <div class="form-group row">
+                                    <button class="btn btn-danger" th:action="@{${productoManaged.updateEstado(produ, produ.categoriasByIdCategoria.idCategoria, 'Eli')}}"
+                                            th:onclick="'return confirm(\'Este producto ha sido eliminado del sistema\')'">Eliminar</button>
+                                </div>
+                            </div>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:each="produ : ${productoManaged.listProductos()}" class="modal fade" th:attr="id='exampleModal' + ${produ.idProducto}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" th:text="${produ.nombre}"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><b>Comentarios:</b></p>
+                    <div th:each="comentario : ${productoManaged.modelo.listarComentarios(produ.idProducto)}">
+                        <div class="alert alert-primary" role="alert" th:text="${comentario.comentario}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${productoManaged.listProductos().isEmpty()}" class="alert alert-info" role="alert">No hay productos para mostrar</div>
+
+</div>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

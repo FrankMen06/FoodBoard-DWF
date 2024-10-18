@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestionar Mesas</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #FFFFFF; /* Fondo blanco */
+            color: #212121; /* Texto negro suave */
+        }
+        .card {
+            background-color: #F5F5F5; /* Fondo gris claro para las tarjetas */
+        }
+        .btn-success {
+            background-color: #66BB6A; /* Verde menta para botones de éxito */
+            border-color: #66BB6A; /* Verde menta para borde */
+        }
+        .btn-danger {
+            background-color: #FF5252; /* Rojo coral para botones de peligro */
+            border-color: #FF5252; /* Rojo coral para borde */
+        }
+        .btn-primary {
+            background-color: #FF7043; /* Naranja cálido para botones primarios */
+            border-color: #FF7043; /* Naranja cálido para borde */
+        }
+        .thead-dark {
+            background-color: #424242; /* Gris oscuro para el encabezado de la tabla */
+            color: #FFFFFF; /* Texto blanco en el encabezado */
+        }
+        .table {
+            background-color: #FFFFFF; /* Fondo blanco para la tabla */
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center display-4">Gestionar Mesas</h1>
+    <p class="lead">En este apartado usted podrá crear, actualizar o eliminar mesas y asignarle la capacidad máxima, en la parte inferior usted puede visualizar a las mesas que se encuentran registradas.</p>
+    <div th:if="${#lists.isNotEmpty(messages)}" class="alert alert-danger" role="alert">
+        <p th:each="msg : ${messages}">${msg}</p>
+    </div>
+    <hr class="my-4"/>
+    <h:form>
+        <input type="hidden" th:value="${mesasManaged.mesa.idMesa}"/>
+        <input type="hidden" th:value="${mesasManaged.mesa.estado}"/>
+        <label for="descripcion" class="lead">Descripción de la mesa:</label>
+        <input type="text" id="descripcion" class="form-control" th:value="${mesasManaged.mesa.descripcion}" required/>
+        <br/>
+        <label for="sector" class="lead">Sector de la mesa:</label>
+        <select class="form-control" id="sector" th:field="${mesasManaged.idSector}">
+            <option th:each="sec : ${sectorManaged.modelo.sectoresFiltrados()}" th:value="${sec[0]}" th:text="${sec[1]}"></option>
+        </select>
+        <br/>
+        <div class="form-group row">
+            <label for="capacidad" class="lead col-sm-6">Capacidad máxima de personas:</label>
+            <input type="number" id="capacidad" class="form-control col-sm-6" th:field="${mesasManaged.mesa.capacidad}" min="2" max="12" required/>
+        </div>
+        <br/><br/>
+        <div class="text-center">
+            <button type="submit" th:if="${mesasManaged.mesa.idMesa == 0}" class="btn btn-success mr-2" th:action="${mesasManaged.guardarMesa()}">Ingresar Mesa</button>
+            <button type="submit" th:if="${mesasManaged.mesa.idMesa > 0}" class="btn btn-success mr-2" th:action="${mesasManaged.modificarMesa()}">Modificar Mesa</button>
+            <button type="button" th:if="${mesasManaged.mesa.idMesa > 0}" class="btn btn-danger" th:action="${mesasManaged.cancelar()}">Cancelar</button>
+        </div>
+    </h:form>
+    <br/><br/>
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="thead-dark text-center">
+            <tr>
+                <th scope="col">Id Mesa</th>
+                <th scope="col">Capacidad</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Sector</th>
+                <th scope="col">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="mesa : ${mesasManaged.listMesas()}" class="text-center">
+                <td th:text="${mesa.idMesa}"></td>
+                <td th:text="${mesa.capacidad}"></td>
+                <td th:text="${mesa.descripcion}"></td>
+                <td th:text="${mesa.sectorByIdSector.nombre}"></td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <form th:action="${mesasManaged.data(mesa, mesa.sectorByIdSector.idSector)}" method="post" class="mr-2">
+                            <button type="submit" class="btn btn-primary">Modificar</button>
+                        </form>
+                        <form th:action="${mesasManaged.eliminarMesa(mesa, mesa.sectorByIdSector.idSector)}" method="post" onsubmit="return confirm('¿Quieres eliminar esta mesa?');">
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
